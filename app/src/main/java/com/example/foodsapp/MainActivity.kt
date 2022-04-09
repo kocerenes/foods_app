@@ -1,6 +1,7 @@
 package com.example.foodsapp
 
 import android.app.Activity
+import android.graphics.pdf.PdfDocument
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,7 +25,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.foodsapp.ui.theme.FoodsAppTheme
+import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +41,7 @@ class MainActivity : ComponentActivity() {
             FoodsAppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    HomePage()
+                    PagePass()
                 }
             }
         }
@@ -41,7 +49,25 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomePage() {
+fun PagePass(){
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = "home_page"){
+        composable("home_page"){
+            HomePage(navController = navController)
+        }
+        composable("detail_page/{food}", arguments = listOf(
+            navArgument("food"){type = NavType.StringType}
+        )){
+            val json = it.arguments?.getString("food")
+            val food = Gson().fromJson(json,Foods::class.java)
+            DetailPage(food = food)
+        }
+    }
+}
+
+@Composable
+fun HomePage(navController: NavController) {
 
     val foodList = remember {
         mutableStateListOf<Foods>()
@@ -84,7 +110,8 @@ fun HomePage() {
                         ) {
                             Row(
                                 modifier = Modifier.clickable {
-
+                                    val foodJson = Gson().toJSon(food)
+                                    navController.navigate("detail_page/$foodjson")
                                 }
                             ) {
                                 Row(
@@ -136,6 +163,6 @@ fun HomePage() {
 @Composable
 fun DefaultPreview() {
     FoodsAppTheme {
-        HomePage()
+
     }
 }
