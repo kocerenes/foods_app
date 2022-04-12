@@ -1,7 +1,6 @@
 package com.example.foodsapp
 
 import android.app.Activity
-import android.graphics.pdf.PdfDocument
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,13 +25,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.foodsapp.entity.Foods
 import com.example.foodsapp.ui.theme.FoodsAppTheme
+import com.example.foodsapp.viewmodel.HomePageViewModel
 import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
@@ -60,7 +63,7 @@ fun PagePass(){
             navArgument("food"){type = NavType.StringType}
         )){
             val json = it.arguments?.getString("food")
-            val food = Gson().fromJson(json,Foods::class.java)
+            val food = Gson().fromJson(json, Foods::class.java)
             DetailPage(food = food)
         }
     }
@@ -69,25 +72,9 @@ fun PagePass(){
 @Composable
 fun HomePage(navController: NavController) {
 
-    val foodList = remember {
-        mutableStateListOf<Foods>()
-    }
+    val viewmodel: HomePageViewModel = viewModel()
 
-    LaunchedEffect(key1 = true) {
-        val food1 = Foods(1, "Köfte", "kofte", 18)
-        val food2 = Foods(2, "Ayran", "ayran", 4)
-        val food3 = Foods(3, "Fanta", "fanta", 5)
-        val food4 = Foods(4, "Makarna", "makarna", 13)
-        val food5 = Foods(5, "Kadayıf", "kadayif", 24)
-        val food6 = Foods(6, "Baklava", "baklava", 29)
-
-        foodList.add(food1)
-        foodList.add(food2)
-        foodList.add(food3)
-        foodList.add(food4)
-        foodList.add(food5)
-        foodList.add(food6)
-    }
+    val foodList = viewmodel.foodsList.observeAsState(listOf())
 
     Scaffold(
         topBar = {
@@ -100,9 +87,9 @@ fun HomePage(navController: NavController) {
         content = {
             LazyColumn {
                 items(
-                    count = foodList.count(),
+                    count = foodList.value!!.count(),
                     itemContent = {
-                        val food = foodList[it]
+                        val food = foodList.value!![it]
                         Card(
                             modifier = Modifier
                                 .padding(all = 5.dp)
