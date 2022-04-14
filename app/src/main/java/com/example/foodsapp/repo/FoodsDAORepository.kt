@@ -1,13 +1,23 @@
 package com.example.foodsapp.repo
 
+import android.app.Application
+import android.provider.ContactsContract
 import androidx.lifecycle.MutableLiveData
+import androidx.room.Database
 import com.example.foodsapp.entity.Foods
+import com.example.foodsapp.room.MyDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-class FoodsDAORepository {
+class FoodsDAORepository(var application: Application) {
 
     var foodsList = MutableLiveData<List<Foods>>()
+    var db : MyDatabase
 
     init {
+        db = MyDatabase.databaseAccess(application)!!
         foodsList = MutableLiveData()
     }
 
@@ -16,22 +26,9 @@ class FoodsDAORepository {
     }
 
     fun getAllFoods(){
-        val list = mutableListOf<Foods>()
-        val food1 = Foods(1, "Köfte", "kofte", 18)
-        val food2 = Foods(2, "Ayran", "ayran", 4)
-        val food3 = Foods(3, "Fanta", "fanta", 5)
-        val food4 = Foods(4, "Makarna", "makarna", 13)
-        val food5 = Foods(5, "Kadayıf", "kadayif", 24)
-        val food6 = Foods(6, "Baklava", "baklava", 29)
-
-        list.add(food1)
-        list.add(food2)
-        list.add(food3)
-        list.add(food4)
-        list.add(food5)
-        list.add(food6)
-
-        foodsList.value = list
+        val job:Job = CoroutineScope(Dispatchers.Main).launch {
+            foodsList.value = db.foodsDAO().allFoods()
+        }
     }
 
 }

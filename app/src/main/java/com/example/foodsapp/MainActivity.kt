@@ -1,6 +1,7 @@
 package com.example.foodsapp
 
 import android.app.Activity
+import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,6 +36,7 @@ import androidx.navigation.navArgument
 import com.example.foodsapp.entity.Foods
 import com.example.foodsapp.ui.theme.FoodsAppTheme
 import com.example.foodsapp.viewmodel.HomePageViewModel
+import com.example.foodsapp.viewmodel.HomePageViewModelFactory
 import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
@@ -72,7 +74,10 @@ fun PagePass(){
 @Composable
 fun HomePage(navController: NavController) {
 
-    val viewmodel: HomePageViewModel = viewModel()
+    val context = LocalContext.current
+    val viewmodel: HomePageViewModel = viewModel(
+        factory = HomePageViewModelFactory(context.applicationContext as Application)
+    )
 
     val foodList = viewmodel.foodsList.observeAsState(listOf())
 
