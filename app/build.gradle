@@ -67,7 +67,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:1.1.1"
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
-    implementation "com.google.code.gson:gson:2.8.6"
+    //implementation "com.google.code.gson:gson:2.8.6"
     implementation "androidx.compose.runtime:runtime-livedata:1.2.0-alpha07"
 
     //Room
@@ -76,4 +76,11 @@ dependencies {
     //Coroutine
     implementation "androidx.room:room-ktx:2.5.0-alpha01"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    //Glide
+    implementation "com.github.skydoves:landscapist-glide:1.4.4"
 }

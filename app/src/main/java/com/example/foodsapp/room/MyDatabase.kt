@@ -7,10 +7,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.foodsapp.entity.Foods
 
-@Database(entities = [Foods::class], version = 1)
+//@Database(entities = [Foods::class], version = 1)
 abstract class MyDatabase : RoomDatabase() {
 
-    abstract fun foodsDAO() : FoodsDAO
+    /*abstract fun foodsDAO() : FoodsDAO
 
     companion object{
         var INSTANCE:MyDatabase? = null
@@ -28,6 +28,6 @@ abstract class MyDatabase : RoomDatabase() {
             return INSTANCE
         }
 
-    }
+    }*/
 
 }

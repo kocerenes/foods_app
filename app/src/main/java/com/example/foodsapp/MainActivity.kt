@@ -38,6 +38,7 @@ import com.example.foodsapp.ui.theme.FoodsAppTheme
 import com.example.foodsapp.viewmodel.HomePageViewModel
 import com.example.foodsapp.viewmodel.HomePageViewModelFactory
 import com.google.gson.Gson
+import com.skydoves.landscapist.glide.GlideImage
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,14 +113,20 @@ fun HomePage(navController: NavController) {
                                         .padding(all = 10.dp)
                                         .fillMaxWidth()
                                 ) {
-                                    val activity = (LocalContext.current as Activity)
+                                    //Glide kullanarak apiden resim çekme
+                                    GlideImage(
+                                        imageModel = "http://kasimadalan.pe.hu/yemekler/resimler/${food.food_name}",
+                                        modifier = Modifier.size(100.dp)
+                                    )
+
+                                    /*val activity = (LocalContext.current as Activity)
                                     Image(
                                         bitmap = ImageBitmap.imageResource(
                                             id = activity.resources.getIdentifier(
                                                 food.food_image, "drawable", activity.packageName
                                             )
                                         ), contentDescription = "", modifier = Modifier.size(100.dp)
-                                    )
+                                    )*/
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.SpaceBetween,

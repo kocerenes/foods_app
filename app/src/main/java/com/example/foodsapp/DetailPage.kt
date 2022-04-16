@@ -16,6 +16,7 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.foodsapp.entity.Foods
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun DetailPage(food: Foods) {
@@ -33,14 +34,20 @@ fun DetailPage(food: Foods) {
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val activity = (LocalContext.current as Activity)
+                //Glide kullanarak apiden resim çekme
+                GlideImage(
+                    imageModel = "http://kasimadalan.pe.hu/yemekler/resimler/${food.food_name}",
+                    modifier = Modifier.size(100.dp)
+                )
+
+                /*val activity = (LocalContext.current as Activity)
                 Image(
                     bitmap = ImageBitmap.imageResource(
                         id = activity.resources.getIdentifier(
                             food.food_image, "drawable", activity.packageName
                         )
                     ), contentDescription = "", modifier = Modifier.size(250.dp)
-                )
+                )*/
                 Text(text = "${food.food_price} TL", color = Color.Blue, fontSize = 50.sp)
                 Button(
                     onClick = {
